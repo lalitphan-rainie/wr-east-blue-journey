@@ -182,3 +182,152 @@
     border-right-color: var(--border);
   }
 }
+
+.ocean {
+  width: 100vw;
+  height: 100vh;
+  background-color: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: transform 2s ease-in-out; /* Smooth transition for the zoom */
+  transform-origin: 0 0;
+}
+
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  /* --- Add a smooth transition --- */
+  transition: transform 1.5s ease-in-out; 
+}
+
+.map-container .map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* --- Set the origin point for the zoom --- */
+  transform-origin: top left; 
+  transition: transform 1.5s ease-in-out;
+}
+
+/* When the map container is zoomed... */
+.map-container.zoomed .map-image {
+  /*
+    Scale factor: viewport width / width of the zoom area.
+    Let's assume the image is displayed at 100vw.
+    The zoom area width is (2560-1125)/2560 = 56% of the image.
+    So we need to scale by 1 / 0.56 = ~1.78
+  */
+  /*
+    Translate X: -(left coordinate / image width)
+    Translate Y: -(top coordinate / image height)
+  */
+  transform: scale(2) translate(-40%, 0%);
+}
+
+.map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+}
+
+.map-view {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background-color: #6a330f;
+}
+
+.ship-container {
+  position: absolute;
+  bottom: 20px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10; /* Ensure it's above the map */
+}
+
+.ship {
+  width: 150px; /* Example size, adjust as you like */
+  height: auto;
+  cursor: pointer;
+}
+
+/* Make it look like a speech bubble */
+.start-bubble {
+  position: relative; /* Needed for the ::after pseudo-element to position correctly */
+  background-color: white;
+  color: black;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin-bottom: 10px; /* Space between bubble and ship */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  font-family: 'Comic Sans MS', cursive, sans-serif; /* A playful font */
+  text-align: center;
+}
+
+.start-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20px; /* Adjust this to position the tail horizontally */
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top-color: white; /* This should match the bubble's background color */
+  border-bottom: 0;
+  margin-left: -10px; /* Nudges the tail into the correct position */
+  margin-bottom: -10px; /* This makes the tail extend downwards from the bubble */
+}
+
+
+.pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.pin:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.entrance-screen {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+}
+
+.blur-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url('./assets/east-blue-map.jpg');
+  background-size: cover;
+  filter: blur(8px) brightness(0.5); /* This creates the blur effect */
+  z-index: 1;
+}
+
+.envelope-card {
+  position: relative;
+  z-index: 2;
+  background: #f4e4bc; /* Parchment color */
+  padding: 40px;
+  border-radius: 2px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  text-align: center;
+  border: 4px solid #3e2723;
+}

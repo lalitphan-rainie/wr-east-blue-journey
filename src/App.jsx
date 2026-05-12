@@ -3,120 +3,106 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import { motion } from 'framer-motion';
+import mapImg from './assets/one-piece-map.png';
+import shipImg from './assets/going-merry-ship.png'; 
+import { islands } from './data/islands';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentIsland, setCurrentIsland] = useState(islands[0]);
+  const [unlockedLevel, setUnlockedLevel] = useState(1);
+  const [isJoined, setIsJoined] = useState(false);
+  const [codename, setCodename] = useState("");
+  const [isMapZoomed, setIsMapZoomed] = useState(false);
+
+  const handleJoin = () => {
+    if (codename.toLowerCase() === "pancetta") { 
+      setIsJoined(true);
+    } else {
+      alert("Wrong codename! Ask your captain for the secret codename to join the crew.");
+    }
+  };
+
+  const handleStartJourney = () => {
+    setIsMapZoomed(true);
+    // You can also hide the ship and bubble after clicking
+  };
+
+  const handleIslandClick = (island) => {
+    if (island.id <= unlockedLevel) {
+      setCurrentIsland(island);
+    } else {
+      alert("You haven't unlocked this island yet!");
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-container">
+      {!isJoined ? (
+        /* --- ENVELOPE SCREEN --- */
+        <div className="entrance-screen">
+          <div className="blur-bg"></div> {/* This will show the blurred map */}
+          
+          <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="envelope-card"
+          >
+            <h2 className="pirate-font">An Invitation to Adventure</h2>
+            <p>Enter your codename to join my journey:</p>
+            <input 
+              type="text" 
+              value={codename} 
+              onChange={(e) => setCodename(e.target.value)}
+              placeholder="Codename..."
+            />
+            <button onClick={handleJoin} className="pirate-button">OPEN</button>
+          </motion.div>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      ) : (
+        /* --- THE ACTUAL MAP --- */
+        <div className="map-view">
+          {/* Your Map and Ship code goes here */}
+          <div className={`map-container ${isMapZoomed ? 'zoomed' : ''}`}>
+            {/* The Actual Map Image */}
+            <img src={mapImg} alt="East Blue" className="map-image" />
 
-      <div className="ticks"></div>
+            {/* The Island Pins */}
+            {islands.map((island) => (
+              <button
+                key={island.id}
+                className={`pin ${island.id <= unlockedLevel ? 'unlocked' : 'locked'}`}
+                style={{ left: `${island.x}%`, top: `${island.y}%` }}
+                onClick={() => handleIslandClick(island)}
+              >
+                {island.id <= unlockedLevel ? '📍' : '🔒'}
+              </button>
+            ))}
+          </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+          {/* Ship and Start Bubble Container */}
+          {!isMapZoomed && ( // <-- Conditionally render the ship and bubble
+            <div className="ship-container" onClick={handleStartJourney}>
+              <motion.div
+                initial={{ x: 100, y: 100, opacity: 0 }}
+                animate={{ x: 0, y: 0, opacity: 1 }}
+                className="start-bubble"
+                onClick={handleStartJourney} // <-- Add onClick handler here
+              >
+                Click me to start!
+              </motion.div>
+              <motion.img
+                src={shipImg}
+                className="ship"
+                onClick={handleStartJourney} // <-- Also on the ship for bigger click area
+                transition={{ type: "spring", stiffness: 50, damping: 20 }}
+              />
+            </div>
+          )}
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      )}
+    </div>
+  );
 }
 
 export default App
