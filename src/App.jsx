@@ -6,16 +6,19 @@ import './App.css'
 import { motion } from 'framer-motion';
 import mapImg from './assets/one-piece-map.png';
 import shipImg from './assets/going-merry-ship.png'; 
-import { islands } from './data/islands';
+import { islands as initialIslands} from './data/islands';
 import FooshaQuiz from './components/FooshaQuiz';
+import PathLine from './components/PathLine';
 
 function App() {
+  const [islands, setIslands] = useState(initialIslands);
   const [currentIsland, setCurrentIsland] = useState(islands[0]);
   const [unlockedLevel, setUnlockedLevel] = useState(1);
   const [isJoined, setIsJoined] = useState(false);
   const [codename, setCodename] = useState("");
   const [isMapZoomed, setIsMapZoomed] = useState(false);
   const [showFooshaQuiz, setShowFooshaQuiz] = useState(false);
+  const [showPathToShell, setShowPathToShell] = useState(false);
 
   const handleJoin = () => {
     if (codename.toLowerCase() === "pancetta") { 
@@ -44,9 +47,38 @@ function App() {
     }
   };
 
+  // --- Create the quiz completion handler ---
+  const handleFooshaQuizComplete = () => {
+    // Close the quiz modal
+    setShowFooshaQuiz(false);
+
+    // Show the path to the next island
+    setShowPathToShell(true);
+
+    // Find the next island to unlock and move to
+    const nextIsland = islands.find(island => island.id === 2);
+
+    if (nextIsland) {
+      // Unlock the next island (id: 2)
+      const updatedIslands = islands.map(island => {
+        if (island.id === 2) {
+          return { ...island, unlocked: true };
+        }
+        return island;
+      });
+      setIslands(updatedIslands);
+
+      // Move the ship to the new island
+      setCurrentIsland(nextIsland);
+
+      // Update the overall unlocked level
+      setUnlockedLevel(2);
+    }
+  };
+
   return (
     <div className="app-container">
-      {showFooshaQuiz && <FooshaQuiz onComplete={() => setShowFooshaQuiz(false)} />}
+      {showFooshaQuiz && <FooshaQuiz onComplete={handleFooshaQuizComplete} />}
 
       {!isJoined ? (
         /* --- ENVELOPE SCREEN --- */
@@ -77,15 +109,20 @@ function App() {
             {/* The Actual Map Image */}
             <img src={mapImg} alt="East Blue" className="map-image" />
 
+            {/* --- 6. Conditionally render the path --- */}
+            {showPathToShell && (
+              <PathLine from={islands.find(i => i.id === 1)} to={islands.find(i => i.id === 2)} />
+            )}
+
             {/* The Island Pins */}
             {isMapZoomed && islands.map((island) => (
               <button
                 key={island.id}
-                className={`pin ${island.id <= unlockedLevel ? 'unlocked' : 'locked'}`}
+                className={`pin ${island.unlocked ? 'unlocked' : 'locked'}`}
                 style={{ left: `${island.x}%`, top: `${island.y}%` }}
                 onClick={() => handleIslandClick(island)}
               >
-                {island.id <= unlockedLevel ? '📍' : '🔒'}
+                {island.unlocked ? '📍' : '🔒'}
               </button>
             ))}
           </div>
