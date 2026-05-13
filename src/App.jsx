@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import mapImg from './assets/one-piece-map.png';
 import shipImg from './assets/going-merry-ship.png'; 
 import { islands } from './data/islands';
+import FooshaQuiz from './components/FooshaQuiz';
 
 function App() {
   const [currentIsland, setCurrentIsland] = useState(islands[0]);
@@ -14,6 +15,7 @@ function App() {
   const [isJoined, setIsJoined] = useState(false);
   const [codename, setCodename] = useState("");
   const [isMapZoomed, setIsMapZoomed] = useState(false);
+  const [showFooshaQuiz, setShowFooshaQuiz] = useState(false);
 
   const handleJoin = () => {
     if (codename.toLowerCase() === "pancetta") { 
@@ -30,7 +32,13 @@ function App() {
 
   const handleIslandClick = (island) => {
     if (island.id <= unlockedLevel) {
-      setCurrentIsland(island);
+      // If it's the first island, show the quiz
+      if (island.id === 1) {
+        setShowFooshaQuiz(true);
+      } else {
+        // For other islands, just move the ship
+        setCurrentIsland(island);
+      }
     } else {
       alert("You haven't unlocked this island yet!");
     }
@@ -38,6 +46,8 @@ function App() {
 
   return (
     <div className="app-container">
+      {showFooshaQuiz && <FooshaQuiz onComplete={() => setShowFooshaQuiz(false)} />}
+
       {!isJoined ? (
         /* --- ENVELOPE SCREEN --- */
         <div className="entrance-screen">
@@ -68,7 +78,7 @@ function App() {
             <img src={mapImg} alt="East Blue" className="map-image" />
 
             {/* The Island Pins */}
-            {islands.map((island) => (
+            {isMapZoomed && islands.map((island) => (
               <button
                 key={island.id}
                 className={`pin ${island.id <= unlockedLevel ? 'unlocked' : 'locked'}`}
