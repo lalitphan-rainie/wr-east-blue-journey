@@ -9,6 +9,14 @@ import shipImg from './assets/going-merry-ship.png';
 import { islands as initialIslands} from './data/islands';
 import FooshaQuiz from './components/FooshaQuiz';
 import PathLine from './components/PathLine';
+import ImageGallery from './components/ImageGallary';
+import { shellTownGallery } from './data/gallarydata';
+import { orangeTownGallery } from './data/orangegallarydata';
+import { syrupVillageGallery } from './data/syrupgallarydata';
+import { baratieGallery } from './data/baratiegallarydata';
+import { gosaGallery } from './data/gosagallarydata';
+import { logueGallery } from './data/loguegallarydata';
+import confetti from 'canvas-confetti';
 
 function App() {
   const [islands, setIslands] = useState(initialIslands);
@@ -18,7 +26,21 @@ function App() {
   const [codename, setCodename] = useState("");
   const [isMapZoomed, setIsMapZoomed] = useState(false);
   const [showFooshaQuiz, setShowFooshaQuiz] = useState(false);
+  const [showShellTownGallery, setShowShellTownGallery] = useState(false);
+  const [showOrangeTownGallery, setShowOrangeTownGallery] = useState(false);
+  const [showSyrupVillageGallery, setShowSyrupVillageGallery] = useState(false);
+  const [showBaratieGallery, setShowBaratieGallery] = useState(false);
+  const [showGosaGallery, setShowGosaGallery] = useState(false);
+  const [showLogueGallery, setShowLogueGallery] = useState(false);
   const [showPathToShell, setShowPathToShell] = useState(false);
+  const [showPathToOrange, setShowPathToOrange] = useState(false);
+  const [showPathToSyrup, setShowPathToSyrup] = useState(false);
+  const [showPathToBaratie, setShowPathToBaratie] = useState(false);
+  const [showPathToGosa, setShowPathToGosa] = useState(false);
+  const [showPathToLogue, setShowPathToLogue] = useState(false);
+  const [showPathToReverseMountain, setShowPathToReverseMountain] = useState(false);
+  const [isGrandLine, setIsGrandLine] = useState(false);
+  const [isClimbing, setIsClimbing] = useState(false);
 
   const handleJoin = () => {
     if (codename.toLowerCase() === "pancetta") { 
@@ -38,7 +60,26 @@ function App() {
       // If it's the first island, show the quiz
       if (island.id === 1) {
         setShowFooshaQuiz(true);
-      } else {
+      } else if (island.id === 2) {
+        setShowShellTownGallery(true);
+      } else if (island.id === 3) {
+        setShowOrangeTownGallery(true);
+      } else if (island.id === 4) {
+        setShowSyrupVillageGallery(true);
+       }
+      else if (island.id === 5) {
+        setShowBaratieGallery(true);
+      }
+      else if (island.id === 6) {
+        setShowGosaGallery(true);
+      }
+      else if (island.id === 7) {
+        setShowLogueGallery(true);
+      }
+      else if (island.id === 8) {
+        handleReverseMountain();
+      }
+      else {
         // For other islands, just move the ship
         setCurrentIsland(island);
       }
@@ -76,10 +117,154 @@ function App() {
     }
   };
 
+  const handleShellTownGalleryComplete = () => {
+    setShowShellTownGallery(false);
+    setShowPathToOrange(true);
+    const nextIsland = islands.find(island => island.id === 3);
+
+    if (nextIsland) {
+      const updatedIslands = islands.map(island => {
+        if (island.id === 3) {
+          return { ...island, unlocked: true };
+        }
+        return island;
+      });
+      setIslands(updatedIslands);
+      setCurrentIsland(nextIsland);
+      setUnlockedLevel(3);
+    }
+  };
+
+  const handleOrangeTownGalleryComplete = () => {
+    setShowOrangeTownGallery(false);
+    setShowPathToSyrup(true);
+
+    const nextIsland = islands.find(island => island.id === 4);
+
+    if (nextIsland) {
+      const updatedIslands = islands.map(island => {
+        if (island.id === 4) {
+          return { ...island, unlocked: true };
+        }
+        return island;
+      });
+      setIslands(updatedIslands);
+      setCurrentIsland(nextIsland);
+      setUnlockedLevel(4);
+    }
+  };
+
+  const handleSyrupVillageGalleryComplete = () => {
+    setShowSyrupVillageGallery(false);
+    setShowPathToBaratie(true);
+
+    const nextIsland = islands.find(island => island.id === 5);
+
+    if (nextIsland) {
+      const updatedIslands = islands.map(island => {
+        if (island.id === 5) {
+          return { ...island, unlocked: true };
+        }
+        return island;
+      });
+      setIslands(updatedIslands);
+      setCurrentIsland(nextIsland);
+      setUnlockedLevel(5);
+    }
+  };
+
+  const handleBaratieGalleryComplete = () => {
+    setShowBaratieGallery(false);
+    setShowPathToGosa(true);
+
+    const nextIsland = islands.find(island => island.id === 6);
+
+    if (nextIsland) {
+      const updatedIslands = islands.map(island => {
+        if (island.id === 6) {
+          return { ...island, unlocked: true };
+        }
+        return island;
+      });
+      setIslands(updatedIslands);
+      setCurrentIsland(nextIsland);
+      setUnlockedLevel(6);
+    }
+  };
+
+  const handleGosaGalleryComplete = () => {
+    setShowGosaGallery(false);
+    setShowPathToLogue(true);
+
+    const nextIsland = islands.find(island => island.id === 7);
+
+    if (nextIsland) {
+      const updatedIslands = islands.map(island => {
+        if (island.id === 7) {
+          return { ...island, unlocked: true };
+        }
+        return island;
+      });
+      setIslands(updatedIslands);
+      setCurrentIsland(nextIsland);
+      setUnlockedLevel(7);
+    }
+  };
+
+  const handleLogueGalleryComplete = () => {
+    setShowLogueGallery(false);
+    setShowPathToReverseMountain(true);
+
+    const nextIsland = islands.find(island => island.id === 8);
+
+    if (nextIsland) {
+      const updatedIslands = islands.map(island => {
+        if (island.id === 8) {
+          return { ...island, unlocked: true };
+        }
+        return island;
+      });
+      setIslands(updatedIslands);
+      setCurrentIsland(nextIsland);
+      setUnlockedLevel(8);
+    }
+  };
+
+  const handleReverseMountain = () => {
+    setIsClimbing(true); // Start the ship animation
+    
+    // After 3 seconds (ship climb time), show the Letter
+    setTimeout(() => {
+      setIsGrandLine(true);
+      triggerConfetti(); // Optional: trigger a small burst here
+    }, 3000);
+  };
+
+  const handleFinalAccept = () => {
+    const duration = 15 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    const interval = setInterval(function() {
+      const timeLeft = animationEnd - Date.now();
+      if (timeLeft <= 0) return clearInterval(interval);
+
+      const particleCount = 50 * (timeLeft / duration);
+      // Blue and Gold confetti for the sea and treasure
+      confetti({ ...defaults, particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 }, colors: ['#00BFFF', '#FFD700', '#FFFFFF'] });
+    }, 250);
+  };
+
+
   return (
     <div className="app-container">
       {showFooshaQuiz && <FooshaQuiz onComplete={handleFooshaQuizComplete} />}
-
+      {showShellTownGallery && <ImageGallery photos={shellTownGallery} onClose={handleShellTownGalleryComplete} />}
+      {showOrangeTownGallery && <ImageGallery photos={orangeTownGallery} onClose={handleOrangeTownGalleryComplete} />}
+      {showSyrupVillageGallery && <ImageGallery photos={syrupVillageGallery} onClose={handleSyrupVillageGalleryComplete} />}
+      {showBaratieGallery && <ImageGallery photos={baratieGallery} onClose={handleBaratieGalleryComplete} />}
+      {showGosaGallery && <ImageGallery photos={gosaGallery} onClose={handleGosaGalleryComplete} />}
+      {showLogueGallery && <ImageGallery photos={logueGallery} onClose={handleLogueGalleryComplete} />}
       {!isJoined ? (
         /* --- ENVELOPE SCREEN --- */
         <div className="entrance-screen">
@@ -109,9 +294,73 @@ function App() {
             {/* The Actual Map Image */}
             <img src={mapImg} alt="East Blue" className="map-image" />
 
+            <motion.img
+            src={shipImg}
+            className="ship"
+            animate={isClimbing ? { 
+              left: "98%", 
+              top: "2%", 
+              rotate: -45 
+            } : { 
+              left: `${currentIsland.x}%`, 
+              top: `${currentIsland.y}%`,
+              rotate: 0
+            }}
+            transition={{ duration: isClimbing ? 3 : 1.5, ease: "easeInOut" }}
+          />
+
+            {isGrandLine && (
+              <motion.div 
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="final-letter-overlay"
+              >
+                <div className="letter-paper">
+                  <h1 className="pirate-font">Log: Entrance to the Grand Line</h1>
+                  <p className="letter-text">
+                    The East Blue was just our prologue. We've weathered the storms, 
+                    shared the meals, and found the treasure in each other. 
+                    The Grand Line is unpredictable, but I don't want to sail it with anyone else.
+                  </p>
+                  
+                  <h2 className="big-question">Ready to be the Official Captain of my heart?</h2>
+                  
+                  <div className="final-actions">
+                    <button className="accept-btn" onClick={handleFinalAccept}>
+                      AYE AYE, CAPTAIN! (YES)
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
             {/* --- 6. Conditionally render the path --- */}
             {showPathToShell && (
               <PathLine from={islands.find(i => i.id === 1)} to={islands.find(i => i.id === 2)} />
+            )}
+
+            {showPathToOrange && (
+              <PathLine from={islands.find(i => i.id === 2)} to={islands.find(i => i.id === 3)} />
+            )}
+
+            {showPathToSyrup && (
+              <PathLine from={islands.find(i => i.id === 3)} to={islands.find(i => i.id === 4)} />
+            )}
+
+            {showPathToBaratie && (
+              <PathLine from={islands.find(i => i.id === 4)} to={islands.find(i => i.id === 5)} />
+            )}
+
+            {showPathToGosa && (
+              <PathLine from={islands.find(i => i.id === 5)} to={islands.find(i => i.id === 6)} />
+            )}
+
+            {showPathToLogue && (
+              <PathLine from={islands.find(i => i.id === 6)} to={islands.find(i => i.id === 7)} />
+            )}
+
+            {showPathToReverseMountain && (
+              <PathLine from={islands.find(i => i.id === 7)} to={islands.find(i => i.id === 8)} />
             )}
 
             {/* The Island Pins */}
