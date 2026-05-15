@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fooshaQuiz } from '../data/quizData';
+import { fooshaQuiz } from '../data/quizdata';
 
 const FooshaQuiz = ({ onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
