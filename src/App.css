@@ -532,3 +532,67 @@
 .accept-btn:hover {
   transform: scale(1.1) rotate(-2deg);
 }
+
+/* Scroll Paper Styling */
+.scroll-paper {
+  background: #f1dfb3;
+  padding: 40px 30px;
+  max-width: 480px;
+  width: 90%;
+  border-left: 15px solid #dcc286;
+  border-right: 15px solid #dcc286;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.1);
+  text-align: center;
+  border-radius: 4px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.scroll-title {
+  color: #5c3818;
+  border-bottom: 2px dashed #5c3818;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.scroll-body-text {
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #2b1a0a;
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+/* Sealed Letter Button Styling */
+.sealed-letter-btn {
+  background: #fffdf5;
+  border: 2px solid #5c3818;
+  padding: 15px 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border-radius: 4px;
+}
+
+.sealed-letter-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  background: #fcf9ee;
+}
+
+.wax-seal {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}

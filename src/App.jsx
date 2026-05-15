@@ -39,7 +39,8 @@ function App() {
   const [showPathToGosa, setShowPathToGosa] = useState(false);
   const [showPathToLogue, setShowPathToLogue] = useState(false);
   const [showPathToReverseMountain, setShowPathToReverseMountain] = useState(false);
-  const [isGrandLine, setIsGrandLine] = useState(false);
+  // const [isGrandLine, setIsGrandLine] = useState(false);
+  const [grandLineStep, setGrandLineStep] = useState(0);
   const [isClimbing, setIsClimbing] = useState(false);
 
   const handleJoin = () => {
@@ -235,7 +236,8 @@ function App() {
     
     // After 3 seconds (ship climb time), show the Letter
     setTimeout(() => {
-      setIsGrandLine(true);
+      // setIsGrandLine(true);
+      setGrandLineStep(1);
       triggerConfetti(); // Optional: trigger a small burst here
     }, 3000);
   };
@@ -309,7 +311,7 @@ function App() {
             transition={{ duration: isClimbing ? 3 : 1.5, ease: "easeInOut" }}
           />
 
-            {isGrandLine && (
+            {/* {isGrandLine && (
               <motion.div 
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -332,6 +334,69 @@ function App() {
                   </div>
                 </div>
               </motion.div>
+            )} */}
+            {grandLineStep > 0 && (
+              <div className="final-letter-overlay">
+              {/* PHASE 1: THE THANK YOU SCROLL */}
+              {grandLineStep === 1 && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="final-letter-overlay scroll-bg"
+                >
+                  <motion.div 
+                    initial={{ y: 100, scale: 0.9 }}
+                    animate={{ y: 0, scale: 1 }}
+                    className="scroll-paper"
+                  >
+                    <h1 className="pirate-font scroll-title">Log: East Blue Cleared</h1>
+                    
+                    <div className="scroll-body-text">
+                      <p>To Walter ....</p>
+                      <p>Thank you so much for your effort during our journey through the East Blue!...</p>
+                      <p>I appreciate all the memories we've made together, all the love that you are showering on me. ^^</p>
+                      <p>I wrote down one last log entry for us, but it's locked inside this envelope...</p>
+                    </div>
+
+                    {/* The Button styled like a sealed wax letter */}
+                    <button 
+                      className="sealed-letter-btn" 
+                      onClick={() => setGrandLineStep(2)}
+                    >
+                      <span className="wax-seal">✉️</span>
+                      <p className="pirate-font">Open Captain's Log</p>
+                    </button>
+                  </motion.div>
+                </motion.div>
+              )}
+
+              {/* PHASE 2: THE GRAND LINE FINALE */}
+              {grandLineStep === 2 && (
+                <motion.div 
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="final-letter-overlay"
+              >
+                <div className="letter-paper">
+                  <h1 className="pirate-font">Log: Entrance to the Grand Line</h1>
+                  <p className="letter-text">
+                    The East Blue was just our prologue. We've weathered the storms, 
+                    shared the meals, and found the treasure in each other. 
+                    The Grand Line is unpredictable, but I don't want to sail it with anyone else.
+                  </p>
+                  
+                  <h2 className="big-question">Ready to be the Official Captain of my heart?</h2>
+                  
+                  <div className="final-actions">
+                    <button className="accept-btn" onClick={handleFinalAccept}>
+                      AYE AYE, CAPTAIN! (YES)
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+              )}
+
+              </div>
             )}
 
             {/* --- 6. Conditionally render the path --- */}
